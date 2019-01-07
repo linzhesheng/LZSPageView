@@ -36,7 +36,9 @@
 - (void)setupUI {
     self.backgroundColor = [UIColor whiteColor];
     
+    // titleView的宽度；是否有指定titleView的宽度，如果没有，就取pageView的宽度
     CGFloat titleViewWidth = _style.titleViewWidth?_style.titleViewWidth:self.bounds.size.width;
+    // titleView的X值；是否有指定titleView的宽度，如果有，取指定的titleView的X值，如果没有，titleView的X值为0
     CGFloat titleViewX = _style.titleViewWidth?_style.titleViewX:0;
     LZSTitleView *titleView = [[LZSTitleView alloc] initWithFrame:CGRectMake(0, titleViewX, titleViewWidth, _style.titleViewHeight) titleArr:_titleArr style:_style];
     [self addSubview:titleView];
@@ -47,7 +49,7 @@
     _contentView = contentView;
     
     titleView.delegate = contentView;
-    contentView.delegate = titleView;
+    [contentView addDelegate:titleView];
 }
 
 @end

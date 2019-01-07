@@ -31,7 +31,6 @@
         
         [self.contentView addSubview:vc.view];
     }
-    
 }
 
 @end

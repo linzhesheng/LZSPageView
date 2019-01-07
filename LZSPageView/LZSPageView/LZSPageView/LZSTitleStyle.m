@@ -14,7 +14,8 @@
     self = [super init];
     
     _titleViewHeight = 44;
-    _normalColor = [UIColor whiteColor];
+    _titleViewX = 0;
+    _normalColor = [UIColor blackColor];
     _selectColor = [UIColor blueColor];
     _fontSize = 15;
     _itemMargin = 30;

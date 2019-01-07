@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "LZSTitleStyle.h"
-#import "LZSContentView.h"
 
 @class LZSTitleView;
 @protocol LZSTitleViewDelegate <NSObject>
@@ -17,7 +16,9 @@
 
 @end
 
-@interface LZSTitleView : UIView
+#import "LZSContentView.h"
+
+@interface LZSTitleView : UIView<LZSContentViewDelegate>
 
 @property(nonatomic,assign)NSInteger currentIndex;
 @property(nonatomic,weak)id<LZSTitleViewDelegate> delegate;

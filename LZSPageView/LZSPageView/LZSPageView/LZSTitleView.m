@@ -9,7 +9,7 @@
 #import "LZSTitleView.h"
 #import "LZSPageViewHeader.h"
 
-@interface LZSTitleView ()<LZSContentViewDelegate>
+@interface LZSTitleView ()
 {
     NSArray<NSString *> *_titleArr;
     LZSTitleStyle *_style;
@@ -105,8 +105,6 @@
         lab.userInteractionEnabled = NO;
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kContentViewWillScroll object:self userInfo:@{@"currentIndex":@(_currentIndex),@"targetIndex":@(selectedLab.tag)}];
-    
     [self adjustTitleLabAndBottomLine:selectedLab];
     [self.delegate selectedTitleDidChange:self currentIndex:_currentIndex];
 }
@@ -123,7 +121,7 @@
             self.bottomLine.width = [self bottomLineWidthWtihIndex:selectedLab.tag];
             self.bottomLine.x = [self bottomLineXWtihIndex:selectedLab.tag];
         } completion:^(BOOL finished) {
-            for (UILabel *lab in _titleLabArr) {
+            for (UILabel *lab in self->_titleLabArr) {
                 lab.userInteractionEnabled = YES;
             }
         }];
@@ -159,7 +157,7 @@
 }
 
 #pragma mark - LZSContentViewDelegate
-- (void)contentViewIsScrolling:(LZSContentView *)contentView beginIndex:(NSInteger)beginIndex targetIndex:(NSInteger)targetIndex progress:(CGFloat)progress {
+- (void)contentViewDidScroll:(LZSContentView *)contentView beginIndex:(NSInteger)beginIndex targetIndex:(NSInteger)targetIndex progress:(CGFloat)progress {
     UILabel *currentLab = _titleLabArr[_currentIndex];
     UILabel *targetLab = _titleLabArr[targetIndex];
     

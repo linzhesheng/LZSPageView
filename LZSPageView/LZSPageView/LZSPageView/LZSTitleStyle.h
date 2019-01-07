@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-//contentView将要开始滚动
-#define kContentViewWillScroll @"kContentViewWillScroll"
-//contentView已经停止滚动
-#define kContentViewDidStopScroll @"kContentViewDidStopScroll"
-
 @interface LZSTitleStyle : NSObject
 
 //titleView高度，默认44

@@ -10,7 +10,7 @@
 #import "LZSContentCollectionViewCell.h"
 #import "LZSPageViewHeader.h"
 
-@interface LZSContentView ()<UICollectionViewDataSource,UICollectionViewDelegate,LZSTitleViewDelegate>
+@interface LZSContentView ()<UICollectionViewDataSource,UICollectionViewDelegate>
 {
     CGFloat _startOffsetX;
     NSInteger _currentIndex;
@@ -19,8 +19,8 @@
 @property(nonatomic,strong)NSArray<UIViewController *> *childVcArr;
 @property(nonatomic,weak)UIViewController *parentVc;
 @property(nonatomic,strong)UICollectionView *collectionView;
-
 @property(nonatomic,strong)NSMutableArray<NSNumber *> *isLoadViewArr;
+@property(nonatomic,strong)NSPointerArray *delegateArr;
 
 @end
 
@@ -36,11 +36,19 @@
             [_isLoadViewArr addObject:@0];
         }
         
+        _delegateArr = [NSPointerArray weakObjectsPointerArray];
         
         [self setupUI];
     }
     
     return self;
+}
+
+- (void)addDelegate:(id<LZSContentViewDelegate>) delegate {
+    if (!delegate) {
+        return;
+    }
+    [_delegateArr addPointer:(__bridge void * _Nullable)(delegate)];
 }
 
 - (void)setupUI {
@@ -51,6 +59,7 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
+    _collectionView.backgroundColor = [UIColor whiteColor];
     
     if (kIOS11_OR_LATER) {
         _collectionView.contentInsetAdjustmentBehavior = UIApplicationBackgroundFetchIntervalNever;
@@ -116,12 +125,12 @@
         progress = (_startOffsetX - scrollView.contentOffset.x) / scrollView.width;
     }
     
-    if ([self.delegate respondsToSelector:@selector(contentViewIsScrolling:beginIndex:targetIndex:progress:)]) {
-        [self.delegate contentViewIsScrolling:self beginIndex:_currentIndex targetIndex:targetIndex progress:progress];
+    for (id delegate in _delegateArr) {
+        if ([delegate respondsToSelector:@selector(contentViewDidScroll:beginIndex:targetIndex:progress:)]) {
+            [delegate contentViewDidScroll:self beginIndex:_currentIndex targetIndex:targetIndex progress:progress];
+        }
     }
-    if ([self.delegate2 respondsToSelector:@selector(contentViewIsScrolling:beginIndex:targetIndex:progress:)]) {
-        [self.delegate2 contentViewIsScrolling:self beginIndex:_currentIndex targetIndex:targetIndex progress:progress];
-    }
+    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -137,18 +146,20 @@
         _isLoadViewArr[indexPath.row] = @1;
     }
     
-    if ([self.delegate respondsToSelector:@selector(contentViewDidEndScroll:currentIndex:)]) {
-        [self.delegate contentViewDidEndScroll:self currentIndex:_currentIndex];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kContentViewDidStopScroll object:self userInfo:@{@"currentIndex":@(_currentIndex)}];
+    for (id delegate in _delegateArr) {
+        if ([delegate respondsToSelector:@selector(contentViewDidEndScroll:currentIndex:)]) {
+            [delegate contentViewDidEndScroll:self currentIndex:_currentIndex];
+        }
     }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
          _currentIndex = _collectionView.contentOffset.x/_collectionView.width;
-        if ([self.delegate respondsToSelector:@selector(contentViewDidEndScroll:currentIndex:)]) {
-            [self.delegate contentViewDidEndScroll:self currentIndex:_currentIndex];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kContentViewDidStopScroll object:self userInfo:@{@"currentIndex":@(_currentIndex)}];
+        for (id delegate in _delegateArr) {
+            if ([delegate respondsToSelector:@selector(contentViewDidEndScroll:currentIndex:)]) {
+                [delegate contentViewDidEndScroll:self currentIndex:_currentIndex];
+            }
         }
     } else {
         scrollView.userInteractionEnabled = NO;
@@ -165,8 +176,6 @@
         cell.vc = _childVcArr[indexPath.row];
         _isLoadViewArr[indexPath.row] = @1;
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kContentViewDidStopScroll object:self userInfo:@{@"currentIndex":@(_currentIndex)}];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -181,7 +190,9 @@
 #pragma mark - 滚动到指定下标的view
 - (void)scrollToViewWithIndex:(NSInteger)index {
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
-    [self.delegate contentViewDidEndScroll:self currentIndex:index];
+    for (id delegate in _delegateArr) {
+        [delegate contentViewDidEndScroll:self currentIndex:index];
+    }
 }
 
 #pragma mark - 解决与系统的手势冲突

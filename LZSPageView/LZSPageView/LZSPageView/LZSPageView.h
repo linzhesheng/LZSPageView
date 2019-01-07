@@ -12,7 +12,7 @@
 
 @interface LZSPageView : UIView
 
-@property(nonatomic,weak)LZSTitleView *titleView;
+@property(nonatomic,weak)LZSTitleView *titleView; 
 @property(nonatomic,weak)LZSContentView *contentView;
 
 - (instancetype)initWithFrame:(CGRect)frame titleArr:(NSArray<NSString *> *)titleArr style:(LZSTitleStyle *)style childViewControllers:(NSArray<UIViewController *> *)childVcArr parentViewController:(UIViewController *)parentVc;
