@@ -17,14 +17,14 @@ Pod::Spec.new do |s|
 
   s.name         = "LZSPageView"
   s.version      = "0.0.1"
-  s.summary      = "a good man write that"
+  s.summary      = "this is good man"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  s.description  = "A good man write that"
+  s.description  = "this is good man haha"
 
   s.homepage     = "https://github.com/linzhesheng/LZSPageView"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT"
+  s.license      = "Copyright (c) 2015年 Lisa. All rights reserved."
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
@@ -54,7 +54,7 @@ Pod::Spec.new do |s|
   s.author             = { "linzhesheng2" => "" }
   # Or just: s.author    = "linzhesheng2"
   # s.authors            = { "linzhesheng2" => "" }
-  # s.social_media_url   = "https://www.jianshu.com/u/9b7b99ef19b3"
+  # s.social_media_url   = "http://twitter.com/linzhesheng2"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -63,10 +63,10 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  # s.platform     = :ios, "11.0"
+  s.platform     = :ios, "11.0"
 
   #  When using multiple platforms
-   s.ios.deployment_target = "11.0"
+  s.ios.deployment_target = "11.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
@@ -92,7 +92,7 @@ Pod::Spec.new do |s|
   s.source_files  = "LZSPageView", "LZSPageView/LZSPageView/**/*.{h,m}"
   s.exclude_files = "LZSPageView/Exclude"
 
-  # s.public_header_files = "LZSPageView/**/*.h"
+  # s.public_header_files = "Classes/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -115,7 +115,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-    s.framework  = "UIKit"
+  s.framework  = "UIKit"
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
